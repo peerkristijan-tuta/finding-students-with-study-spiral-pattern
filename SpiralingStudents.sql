@@ -43,7 +43,13 @@ INSERT INTO study_sessions (session_id, student_id, subject, session_date, hours
     (402, 4, 'Quantum Physics', '2023-10-03', 6.0),
     (403, 4, 'Electromagnetism', '2023-10-07', 4.0),
     (404, 4, 'Classical Mechanics', '2023-10-10', 5.5),
-    (405, 4, 'Quantum Physics', '2023-10-16', 7.0);
+    (405, 4, 'Quantum Physics', '2023-10-16', 7.0),
+    (106, 1, 'Networking', '2023-10-20', 3.0),
+    (107, 1, 'Operating Systems', '2023-10-21', 4.0),
+    (108, 1, 'Compilers', '2023-10-22', 2.5),
+    (109, 1, 'Databases', '2023-10-23', 3.5),
+    (110, 1, 'Networking', '2023-10-24', 2.0),
+    (111, 1, 'Security', '2023-10-25', 4.5);
 
 SELECT
     student.student_id,
@@ -60,9 +66,10 @@ JOIN (
     FROM study_sessions session
     JOIN study_sessions othersession ON othersession.student_id = session.student_id 
     AND othersession.session_date > session.session_date 
-    AND JULIANDAY(othersession.session_date) - JULIANDAY(session.session_date) < 30
+    AND JULIANDAY(othersession.session_date) - JULIANDAY(session.session_date) < 3
     GROUP BY session.student_id
-    HAVING COUNT(DISTINCT session.subject) > 1 AND COUNT(*) > 2
+    HAVING COUNT(
+        DISTINCT session.subject) > 2 AND COUNT(*) > 5
 ) cycle ON cycle.student_id = student.student_id
 GROUP BY student.student_id, student.student_name, student.major, cycle.cycle_length
-ORDER BY cycle.cycle_length DESC, total_study_hours DESC;
+ORDER BY cycle.cycle_length DESC, total_study_hours DESC
