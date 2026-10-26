@@ -20,36 +20,25 @@ INSERT INTO students (student_id, student_name, major) VALUES
     (3, 'Charlie Brown', 'Biology'),
     (4, 'Diana Prince', 'Physics');
 
-INSERT INTO study_sessions (session_id, student_id, subject, session_date, hours_studied) VALUES
-    (101, 1, 'CS Fundamentals', '2023-10-01', 3.5),
-    (102, 1, 'Algorithms', '2023-10-03', 4.0),
-    (103, 1, 'Data Structures', '2023-10-07', 2.5),
-    (104, 1, 'CS Fundamentals', '2023-10-10', 3.0),
-    (105, 1, 'Machine Learning', '2023-10-15', 5.0),
-
-    (201, 2, 'Calculus I', '2023-10-02', 4.0),
-    (202, 2, 'Linear Algebra', '2023-10-04', 3.0),
-    (203, 2, 'Differential Equations', '2023-10-08', 5.5),
-    (204, 2, 'Calculus I', '2023-10-12', 2.0),
-    (205, 2, 'Probability', '2023-10-16', 4.5),
-
-    (301, 3, 'Botany', '2023-10-01', 2.0),
-    (302, 3, 'Zoology', '2023-10-03', 3.0),
-    (303, 3, 'Ecology', '2023-10-07', 4.5),
-    (304, 3, 'Botany', '2023-10-10', 2.5),
-    (305, 3, 'Zoology', '2023-10-15', 3.5),
-
-    (401, 4, 'Classical Mechanics', '2023-10-01', 5.0),
-    (402, 4, 'Quantum Physics', '2023-10-03', 6.0),
-    (403, 4, 'Electromagnetism', '2023-10-07', 4.0),
-    (404, 4, 'Classical Mechanics', '2023-10-10', 5.5),
-    (405, 4, 'Quantum Physics', '2023-10-16', 7.0),
-    (106, 1, 'Networking', '2023-10-20', 3.0),
-    (107, 1, 'Operating Systems', '2023-10-21', 4.0),
-    (108, 1, 'Compilers', '2023-10-22', 2.5),
-    (109, 1, 'Databases', '2023-10-23', 3.5),
-    (110, 1, 'Networking', '2023-10-24', 2.0),
-    (111, 1, 'Security', '2023-10-25', 4.5);
+INSERT INTO study_sessions (session_id, student_id, subject, session_date, hours_studied)
+WITH RECURSIVE gen(n) AS (
+    SELECT 1
+    UNION ALL
+    SELECT n + 1 FROM gen WHERE n < 20
+)
+SELECT
+    n,
+    (ABS(RANDOM()) % 4) + 1,
+    CASE (ABS(RANDOM()) % 5)
+        WHEN 0 THEN 'Algorithms'
+        WHEN 1 THEN 'Calculus I'
+        WHEN 2 THEN 'Botany'
+        WHEN 3 THEN 'Quantum Physics'
+        ELSE 'Data Structures'
+    END,
+    DATE('2023-10-01', '+' || (ABS(RANDOM()) % 3) || ' days'),
+    ROUND((ABS(RANDOM()) % 60 + 10) / 10.0, 1)
+FROM gen;
 
 SELECT
     student.student_id,
